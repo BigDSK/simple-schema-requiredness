@@ -1,0 +1,41 @@
+<head>
+  <title>simple-schema-requiredness</title>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Custom Requiredness</h1> {{> updateTemplate}}
+    <h2>Reproduction:</h2>
+    <ol>
+      <li>
+        Read: <a href="https://github.com/aldeed/meteor-simple-schema#make-a-field-conditionally-required">Make a field conditionally required</a>
+      </li>
+      <li>
+        App loads with a value of 'bar'. That should display in the input field.
+      </li>
+      <li>
+        You may update the value to confirm the change persists.
+      </li>
+      <li>
+        Now remove all text from the input field and submit. You should see a validation error, as the custom function looks like:
+        <pre>
+        custom: function() {
+          console.log("Custom function executed! This: ");
+          console.dir(this);
+          if (!this.isSet) {
+            return 'required';
+          }
+        }
+      </pre> <b>But unfortunately the function isn't called, because the operator is '$unset'.</b>
+      </li>
+      <li>
+        It looks like this change broke it: https://github.com/aldeed/meteor-simple-schema/issues/102
+      </li>
+    </ol>
+  </div>
+
+</body>
+
+<template name="updateTemplate">
+  {{> quickForm collection="TheCollection" doc=editingDoc id="updateItem" type="update"}}
+</template>
